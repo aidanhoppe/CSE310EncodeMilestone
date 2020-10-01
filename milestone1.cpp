@@ -12,7 +12,8 @@ using namespace std;
 char* stringToArray(string str, int length);
 char** arrayToBlock(char* array, int length);
 int sortBlockInsertion(char** block, int length);
-int sortBlockQuick(char** block, int length);
+void sortBlockQuick(char** block, int low, int high, int length);
+int partition(char** block, int low, int high, int length);
 char* getLast(char** block, int length);
 bool compareString(char* str1, char* str2, int length);
 int arrayToString(char* array, int length);
@@ -46,7 +47,7 @@ int main(int argc, char** argv) {
 		if(sortType == "insertion"){
 			sortBlockInsertion(dataBlock, stringLength); //sort the block
 		} else {
-			sortBlockQuick(dataBlock, stringLength);
+			sortBlockQuick(dataBlock, 0, stringLength-1, stringLength);
 		}
 	
 		for(int i = 0; i<stringLength; i++){   //find the index of the original line and store it in result
@@ -80,7 +81,11 @@ int arrayToString(char* arr, int length){
 	char nextChar = arr[index+1];
 	while(index < length){ //finishes when the index becomes the length so there are no more characters to print
 		if(nextChar!=currentChar){   //when the characters change, update the encoded message
-			cout << counter << " " << currentChar << " ";
+			if(index != length-1){
+				cout << counter << " " << currentChar << " ";
+			} else {
+				cout << counter << " " << currentChar;
+			}
 			index++;
 			currentChar = nextChar;
 			nextChar = arr[index+1];
@@ -137,8 +142,30 @@ int sortBlockInsertion(char** block, int length){
 	return 0;
 }
 
-int sortBlockQuick(char** block, int length){
+void sortBlockQuick(char** block, int low, int high, int stringLength){
+	if(low<high){
+		int partitionIndex = partition(block, low, high, stringLength);
+		sortBlockQuick(block, low, partitionIndex-1, stringLength);
+		sortBlockQuick(block, partitionIndex+1, high, stringLength);
+	}
+}
+
+int partition(char** block, int low, int high, int length){
+	char* pivot = block[high];
+	int i = (low-1);
 	
+	for(int j = low; j <= high-1; j++){
+		if(compareString(pivot, block[j], length)){
+			i++;
+			char* temp = block[i];
+			block[i] = block[j];
+			block[j] = temp;
+		}
+	}
+	char* temp = block[i+1];
+	block[i+1] = block[high];
+	block[high] = temp;
+	return(i+1);
 }
 
 //this collects the last column of our sorted block and stores it in an array
