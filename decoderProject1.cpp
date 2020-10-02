@@ -14,8 +14,9 @@ using namespace std;
 char* arrayFromLine();
 char* sortArray(char* array, int size);
 void fillNext(char* lastColumn, char* sortedColumn);
-char* sortColumnInsertion(char* lastColumn);
-char* sortColumnQuick(char* lastColumn);
+void sortColumnInsertion(char* sortedColumn, int stringLength);
+void sortColumnQuick(char* sortedColumn, int low, int high, int length);
+int partition(char* sortedColumn, int low, int high, int length);
 
 
 int main(int argc, char** argv) {
@@ -76,14 +77,21 @@ int main(int argc, char** argv) {
 			
 			for(int i = 0; i<stringLength; i++){
 				lastColumn[i] = tempColumn[i];
-				//cout << lastColumn[i];
+				sortedColumn[i] = tempColumn[i];
+				cout << lastColumn[i];
 			}
 			delete tempColumn;
 			
 			if(sortType == "insertion"){
-				sortedColumn = sortColumnInsertion(lastColumn);
+				sortColumnInsertion(sortedColumn, stringLength);
 			} else {
-				sortedColumn = sortColumnQuick(lastColumn);
+				sortColumnQuick(sortedColumn, 0 , stringLength-1, stringLength);
+			}
+			
+			
+			cout << endl;
+			for(int i = 0; i<stringLength; i++){
+				cout << sortedColumn[i];
 			}
 			
 			fillNext(lastColumn, sortedColumn);
@@ -100,10 +108,42 @@ void fillNext(char* lastColumn, char* sortedColumn){
 	
 }
 
-char* sortColumnInsertion(char* lastColumn){
-	
+void sortColumnInsertion(char* sortedColumn, int stringLength){
+	int i, j;
+	char key;
+	for(j =1; j<stringLength; j++){ //this is the insertion sort implementation
+		key = sortedColumn[j];
+		i = j-1;
+		while(i >= 0 && sortedColumn[i]>key){  //compareString returns true if block[i] is greater than key 
+			sortedColumn[i+1] = sortedColumn[i];
+			i--;
+		}
+		sortedColumn[i+1] = key;
+	}
 }
 
-char* sortColumnQuick(char* lastColumn){
+void sortColumnQuick(char* sortedColumn, int low, int high, int length){
+	if(low<high){
+		int partitionIndex = partition(sortedColumn, low, high, length);
+		sortColumnQuick(sortedColumn, low, partitionIndex-1, length);
+		sortColumnQuick(sortedColumn, partitionIndex+1, high, length);
+	}
+}
+
+int partition(char* sortedColumn, int low, int high, int length){
+	char pivot = sortedColumn[high];
+	int i = (low-1);
 	
+	for(int j = low; j <= high-1; j++){
+		if(pivot > sortedColumn[j]){
+			i++;
+			char temp = sortedColumn[i];
+			sortedColumn[i] = sortedColumn[j];
+			sortedColumn[j] = temp;
+		}
+	}
+	char temp = sortedColumn[i+1];
+	sortedColumn[i+1] = sortedColumn[high];
+	sortedColumn[high] = temp;
+	return(i+1);
 }
