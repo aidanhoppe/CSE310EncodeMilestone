@@ -9,7 +9,9 @@ Description: This is the encoding portion of assignment 1. It creates string per
 #include <iostream>
 #include <cstdlib>
 #include <string>
+//#include <chrono>
 using namespace std;
+//using namespace std::chrono;
 
 char* arrayFromLine();
 char* sortArray(char* array, int size);
@@ -21,6 +23,8 @@ int partition(char* sortedColumn, int low, int high, int length);
 
 
 int main(int argc, char** argv) {
+	
+//		auto start = high_resolution_clock::now();
 	
 		string toBeDecoded;
 		int stringLength;
@@ -62,6 +66,7 @@ int main(int argc, char** argv) {
 			
 			int loopLength = stringLength/4+1;
 			stringLength = 0;
+			repetitions = 0;
 			for(int i = 0; i<loopLength; i++){
 				repetitions = toBeDecoded[4*i]-'0';
 				for(int j = 0; j<repetitions; j++){
@@ -71,17 +76,20 @@ int main(int argc, char** argv) {
 				stringLength += repetitions;
 			}
 			
+
 			lastColumn = new char[stringLength];
 			sortedColumn = new char[stringLength];
 			checkedArray = new int[stringLength];
+//			for(int i = 0; i<stringLength; i++){
+//				checkedArray[i]=0;
+//			}
 			nextArray = new int[stringLength];
 			
 			for(int i = 0; i<stringLength; i++){
 				lastColumn[i] = tempColumn[i];
 				sortedColumn[i] = tempColumn[i];
-				//cout << lastColumn[i];
 			}
-			delete tempColumn;
+			delete[] tempColumn;
 			
 			if(sortType == "insertion"){
 				sortColumnInsertion(sortedColumn, stringLength);
@@ -92,8 +100,25 @@ int main(int argc, char** argv) {
 			fillNext(lastColumn, sortedColumn, nextArray, stringLength, checkedArray);
 			
 			outputFromNext(nextArray, sortedColumn, stringLength, index);
-
+			
+			delete[] lastColumn;
+			delete[] sortedColumn;
+		//	delete[] checkedArray;
+		//	delete[] nextArray;
+			
+//			lastColumn = nullptr;
+//			sortedColumn = nullptr;
+//			checkedArray = nullptr;
+//			nextArray = nullptr;
 		}
+		
+//		auto stop = high_resolution_clock::now();
+//		
+//		auto duration = duration_cast<microseconds>(stop-start);
+//		
+//		cout << "time: ";
+//		cout << duration.count();
+		
 		return 1;
 		
 }
