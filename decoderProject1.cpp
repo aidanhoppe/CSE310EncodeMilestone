@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 			stringLength = toBeDecoded.length();
 			
 			while(stringLength == 0){
-				cout << endl << endl;
+				cout << endl;
 				getline(cin, toBeDecoded);
 				stringLength = toBeDecoded.length();
 			}
@@ -89,25 +89,10 @@ int main(int argc, char** argv) {
 				sortColumnQuick(sortedColumn, 0 , stringLength-1, stringLength);
 			}
 			
-			
-//			//cout << endl;            //---------------------
-//			for(int i = 0; i<stringLength; i++){
-//				cout << sortedColumn[i];
-//			}
-//			cout << endl;//-----------------------------------
-			
 			fillNext(lastColumn, sortedColumn, nextArray, stringLength, checkedArray);
 			
-//			for(int i = 0; i< stringLength; i++){
-//				cout << nextArray[i];
-//			}
-//			cout << endl; //-------------------------
-			
 			outputFromNext(nextArray, sortedColumn, stringLength, index);
-			
-			//stringLength = array.length();
-			
-			//char* checkedArray = new char[stringLength];
+
 		}
 		return 1;
 		
@@ -130,6 +115,7 @@ void outputFromNext(int* nextArray, char* sortedColumn, int stringLength, int in
 		cout << sortedColumn[index];
 		index = nextArray[index];
 	}
+	cout<<endl;
 }
 
 void sortColumnInsertion(char* sortedColumn, int stringLength){
