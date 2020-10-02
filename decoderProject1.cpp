@@ -13,7 +13,8 @@ using namespace std;
 
 char* arrayFromLine();
 char* sortArray(char* array, int size);
-void fillNext(char* lastColumn, char* sortedColumn);
+void fillNext(char* lastColumn, char* sortedColumn, int* nextArray, int length, int* checkedArray);
+void outputFromNext(int* nextArray, char* sortedColumn, int stringLength, int index);
 void sortColumnInsertion(char* sortedColumn, int stringLength);
 void sortColumnQuick(char* sortedColumn, int low, int high, int length);
 int partition(char* sortedColumn, int low, int high, int length);
@@ -43,16 +44,16 @@ int main(int argc, char** argv) {
 			stringLength = toBeDecoded.length();
 			
 			while(stringLength == 0){
-				cout << endl;
+				cout << endl << endl;
 				getline(cin, toBeDecoded);
 				stringLength = toBeDecoded.length();
 			}
 			
-			cout << toBeDecoded;
-			
 			tempColumn = new char[1000];
 			
 			index = atoi(toBeDecoded.c_str());
+			
+			//cout << index << endl;
 			
 			getline(cin, toBeDecoded);
 			stringLength = toBeDecoded.length();
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
 			for(int i = 0; i<stringLength; i++){
 				lastColumn[i] = tempColumn[i];
 				sortedColumn[i] = tempColumn[i];
-				cout << lastColumn[i];
+				//cout << lastColumn[i];
 			}
 			delete tempColumn;
 			
@@ -89,12 +90,20 @@ int main(int argc, char** argv) {
 			}
 			
 			
-			cout << endl;
-			for(int i = 0; i<stringLength; i++){
-				cout << sortedColumn[i];
-			}
+//			//cout << endl;            //---------------------
+//			for(int i = 0; i<stringLength; i++){
+//				cout << sortedColumn[i];
+//			}
+//			cout << endl;//-----------------------------------
 			
-			fillNext(lastColumn, sortedColumn);
+			fillNext(lastColumn, sortedColumn, nextArray, stringLength, checkedArray);
+			
+//			for(int i = 0; i< stringLength; i++){
+//				cout << nextArray[i];
+//			}
+//			cout << endl; //-------------------------
+			
+			outputFromNext(nextArray, sortedColumn, stringLength, index);
 			
 			//stringLength = array.length();
 			
@@ -104,8 +113,23 @@ int main(int argc, char** argv) {
 		
 }
 
-void fillNext(char* lastColumn, char* sortedColumn){
-	
+void fillNext(char* lastColumn, char* sortedColumn, int* nextArray, int length, int* checkedArray){
+	for(int i = 0; i<length; i++){
+		for(int j = 0; j<length; j++){
+			if(sortedColumn[i] == lastColumn[j] && checkedArray[j]!=1){
+				nextArray[i]=j;
+				checkedArray[j] = 1;
+				break;
+			}
+		}
+	}
+}
+
+void outputFromNext(int* nextArray, char* sortedColumn, int stringLength, int index){
+	for(int i = 0; i<stringLength; i++){
+		cout << sortedColumn[index];
+		index = nextArray[index];
+	}
 }
 
 void sortColumnInsertion(char* sortedColumn, int stringLength){
