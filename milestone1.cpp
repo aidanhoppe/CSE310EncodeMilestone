@@ -20,6 +20,7 @@ int arrayToString(char* array, int length);
 
 int main(int argc, char** argv) {
 	
+	
 	int result;
 	int stringLength = -1;
 	string sortType;
@@ -70,6 +71,7 @@ int main(int argc, char** argv) {
 			delete[] dataBlock;
 		}
 	}
+	
 	return 0;
 }
 
@@ -142,7 +144,7 @@ int sortBlockInsertion(char** block, int length){
 	return 0;
 }
 
-void sortBlockQuick(char** block, int low, int high, int stringLength){
+void sortBlockQuick(char** block, int low, int high, int stringLength){ //this is the implementation of quicksort which has been adapted to work for the block
 	if(low<high){
 		int partitionIndex = partition(block, low, high, stringLength);
 		sortBlockQuick(block, low, partitionIndex-1, stringLength);
@@ -150,14 +152,14 @@ void sortBlockQuick(char** block, int low, int high, int stringLength){
 	}
 }
 
-int partition(char** block, int low, int high, int length){
+int partition(char** block, int low, int high, int length){  //this is an accessory to quicksort which will choose a partition
 	char* pivot = block[high];
 	int i = (low-1);
 	
 	for(int j = low; j <= high-1; j++){
 		if(compareString(pivot, block[j], length)){
 			i++;
-			char* temp = block[i];
+			char* temp = block[i]; //this will swap around the partition if needed
 			block[i] = block[j];
 			block[j] = temp;
 		}
